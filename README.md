@@ -1,4 +1,4 @@
-# Avaliação MEC — Evidências
+# Avaliação MEC - Evidências
 
 Prova de conceito de uma aplicação web para organização e apresentação de evidências regulatórias em avaliações in loco do MEC/INEP.
 
