@@ -5,18 +5,39 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Evidência MEC — PPC</title>
 <style>
-:root{--bg:#f5f7fb;--panel:#fff;--text:#172033;--muted:#667085;--border:#e4e7ec;--brand:#173f7a;--brand2:#24589c}
+:root{--bg:#f5f7fb;--panel:#fff;--text:#172033;--muted:#667085;--border:#e4e7ec;--brand:#173f7a;--brand2:#24589c;--danger:#b42318}
 *{box-sizing:border-box}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text)}
 header{background:#0f294f;color:#fff;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}.brand{font-weight:800}.brand small{display:block;font-weight:500;opacity:.75;margin-top:4px}.back{color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.35);padding:9px 12px;border-radius:9px;font-size:13px;font-weight:700}
-main{max-width:1200px;margin:0 auto;padding:22px}.meta{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:16px}.meta h1{font-size:21px;margin:0 0 7px}.meta p{margin:4px 0;color:var(--muted);font-size:14px}.tag{display:inline-block;margin-top:8px;background:#eef4ff;color:var(--brand);font-weight:800;font-size:12px;padding:6px 9px;border-radius:999px}.viewer{background:var(--panel);border:1px solid var(--border);border-radius:14px;overflow:hidden}.viewer iframe{display:block;width:100%;height:75vh;border:0}.fallback{padding:12px 16px;border-top:1px solid var(--border);font-size:12px;color:var(--muted)}.fallback a{color:var(--brand);font-weight:700}
-@media(max-width:700px){header{align-items:flex-start;flex-direction:column}main{padding:14px}.viewer iframe{height:68vh}}
+main{max-width:1200px;margin:0 auto;padding:22px}.meta{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:16px}.meta h1{font-size:21px;margin:0 0 7px}.meta p{margin:4px 0;color:var(--muted);font-size:14px}.tag{display:inline-block;margin-top:8px;background:#eef4ff;color:var(--brand);font-weight:800;font-size:12px;padding:6px 9px;border-radius:999px}
+.viewer{background:var(--panel);border:1px solid var(--border);border-radius:14px;overflow:hidden}.toolbar{display:flex;gap:10px;align-items:center;justify-content:center;padding:10px;border-bottom:1px solid var(--border)}button{border:1px solid var(--border);background:#fff;border-radius:8px;padding:8px 11px;font-weight:700;cursor:pointer}.page-info{font-size:13px;color:var(--muted);min-width:110px;text-align:center}.canvas-wrap{height:72vh;overflow:auto;background:#e9edf3;padding:20px;text-align:center}canvas{max-width:100%;height:auto;box-shadow:0 2px 12px rgba(0,0,0,.15);background:white}.status{padding:14px 16px;font-size:13px;color:var(--muted);border-top:1px solid var(--border)}.status.error{color:var(--danger)}.status a{color:var(--brand);font-weight:700}
+@media(max-width:700px){header{align-items:flex-start;flex-direction:column}main{padding:14px}.canvas-wrap{height:66vh;padding:10px}}
 </style>
 </head>
 <body>
 <header><div class="brand">Evidências MEC<small>Engenharia de Computação</small></div><a class="back" href="index.html">← Voltar aos qualificadores</a></header>
 <main>
 <section class="meta"><h1>PPC — Engenharia de Computação 2027</h1><p><strong>Qualificador:</strong> D4-B1-Q2</p><p><strong>Localização da evidência:</strong> seção 3.4 — Política de Acessibilidade</p><span class="tag">Página 21</span></section>
-<section class="viewer"><iframe src="https://drive.google.com/file/d/13o_gr-Ro5L85ApMo5Iky6pYz6363G3-g/preview#page=21" title="PPC Engenharia de Computação — página 21" allow="autoplay"></iframe><div class="fallback">Teste de navegação contextual. Caso o visualizador do Google Drive ignore a página, será necessário hospedar/servir o PDF diretamente para controlar a navegação. <a href="https://drive.google.com/file/d/13o_gr-Ro5L85ApMo5Iky6pYz6363G3-g/view" target="_blank" rel="noopener noreferrer">Abrir documento original</a>.</div></section>
+<section class="viewer">
+  <div class="toolbar"><button id="prev">←</button><div class="page-info">Página <strong id="pageNum">21</strong> de <span id="pageCount">—</span></div><button id="next">→</button></div>
+  <div class="canvas-wrap"><canvas id="pdfCanvas"></canvas></div>
+  <div id="status" class="status">Carregando o PPC diretamente na página 21…</div>
+</section>
 </main>
+<script type="module">
+import * as pdfjsLib from 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.6.82/pdf.min.mjs';
+pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.6.82/pdf.worker.min.mjs';
+const pdfUrl='https://drive.google.com/uc?export=download&id=13o_gr-Ro5L85ApMo5Iky6pYz6363G3-g';
+let pdfDoc=null,pageNum=21,rendering=false;
+const canvas=document.getElementById('pdfCanvas'),ctx=canvas.getContext('2d'),status=document.getElementById('status');
+async function renderPage(n){if(!pdfDoc||rendering)return;rendering=true;const page=await pdfDoc.getPage(n);const base=page.getViewport({scale:1});const available=Math.min(1000,document.querySelector('.canvas-wrap').clientWidth-40);const scale=Math.max(.7,available/base.width);const viewport=page.getViewport({scale});canvas.width=viewport.width;canvas.height=viewport.height;await page.render({canvasContext:ctx,viewport}).promise;document.getElementById('pageNum').textContent=n;status.textContent='Evidência aberta na página '+n+'.';rendering=false;}
+try{
+  pdfDoc=await pdfjsLib.getDocument({url:pdfUrl,withCredentials:true}).promise;
+  document.getElementById('pageCount').textContent=pdfDoc.numPages;
+  if(pageNum>pdfDoc.numPages)pageNum=pdfDoc.numPages;
+  await renderPage(pageNum);
+}catch(err){console.error(err);status.classList.add('error');status.innerHTML='O navegador bloqueou o carregamento direto do PDF a partir do Google Drive. <a href="https://drive.google.com/file/d/13o_gr-Ro5L85ApMo5Iky6pYz6363G3-g/view" target="_blank" rel="noopener noreferrer">Abrir o PPC no Drive</a>.';}
+document.getElementById('prev').onclick=()=>{if(pdfDoc&&pageNum>1){pageNum--;renderPage(pageNum)}};
+document.getElementById('next').onclick=()=>{if(pdfDoc&&pageNum<pdfDoc.numPages){pageNum++;renderPage(pageNum)}};
+</script>
 </body>
 </html>
